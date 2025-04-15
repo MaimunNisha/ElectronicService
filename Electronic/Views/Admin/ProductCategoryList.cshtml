@@ -1,0 +1,228 @@
+﻿@model Electronic.Models.ProductCategoryListModel
+@{
+    ViewData["Title"] = "ProductCategoryList";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<div style="border:1px solid #dbdade; border-radius:5px">
+    <div class="container-fluid py-3 ">
+        <div class="admin-heading ">
+            <h1 style="font-size:25px" class="d-inline-block m-0">Product Category List</h1>
+
+
+            <!--Add Category Button trigger modal -->
+            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#AddCategoryModel">
+                <i class="fa-solid fa-plus px-1"></i>
+                Add Product Category
+            </button>
+
+        </div>
+    </div>
+    <hr />
+
+    <!--Edit Category Modal -->
+    <div class="modal fade" id="EditCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="EditProductCategory" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                        <input asp-for="P_C_Id" type="hidden" />
+
+                        <div class="mb-3">
+                            <label asp-for="P_C_Name" class="form-label">Name</label>
+                            <input asp-for="P_C_Name" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="P_C_Order" class="form-label">Order</label>
+                            <input asp-for="P_C_Order" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <p class="d-inline-block m-0 m-xl-2 m-lg-1">Product Image:</p>
+                            <span id="passwordHelpInline" class="form-text m-0">
+                                (Must be 650*180 pixels and is less than 3 MB in size.)
+                            </span>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-images"></i></span>
+
+                                <input class="form-control p-1" type="file" asp-for="P_C_Image_Temp">
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>Current Product Image:</p>
+                            <img id="currentProductImage" src="" alt="Current Image" height="150px" width="150px" />
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <label asp-for="P_C_Status" class="form-check-label" for="flexSwitchCheckDefault">Status</label>
+                                <input asp-for="P_C_Status" class="form-check-input" type="checkbox" role="switch" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Add Category Modal -->
+    <div class="modal fade" id="AddCategoryModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="AddProductCategory" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label asp-for="P_C_Name" class="form-label">Name</label>
+                            <input asp-for="P_C_Name" class="form-control" placeholder="Enter Category Name" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="P_C_Order" class="form-label">Order</label>
+                            <input asp-for="P_C_Order" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <p class="d-inline-block m-0 m-xl-2 m-lg-1">Product Image:</p>
+                            <span id="passwordHelpInline" class="form-text m-0">
+                                (Must be 650*180 pixels and is less than 3 MB in size.)
+                            </span>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-images"></i></span>
+
+                                <input class="form-control p-1" type="file" asp-for="P_C_Image_Temp">
+
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <label asp-for="P_C_Status" class="form-check-label" for="flexSwitchCheckDefault">Status</label>
+                                <input asp-for="P_C_Status" class="form-check-input" type="checkbox" role="switch" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="p-3">
+        <table class="table border table-hover p-3 table-bordered" id="CategoryTable">
+            <thead class="table-light">
+                <tr>
+                    @* <th class="d-none">ID</th> *@
+                    <th>Name</th>
+                    <th>Order</th>
+                    <th>Product Image</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.productCategoryList)
+                {
+                    <tr>
+                        @* <td class="d-none">@item.Cid</td> *@
+                        <td>@item.P_C_Name</td>
+                        <td>@item.P_C_Order</td>
+                        <td>
+                            <img src="~/@item.P_C_Image" alt="Alternate Text" height="150px" width="150px" />
+                        </td>
+
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" onchange="StatusUpdate('@item.P_C_Id' ,this.checked)" style="width:30px" role="switch" type="checkbox" checked="@item.P_C_Status" />
+                            </div>
+                        </td>
+                        <td>
+                            <a onclick="editcategory(this,'@item.P_C_Id')" data-bs-toggle="modal" data-bs-target="#EditCategoryModal" class="btn btn-outline-success w-px-14 mx-1"><i class="fa-regular fa-pen-to-square"></i></a>
+                            @* <a asp-action="" class="btn btn-outline-danger w-px-14 mx-1"><i class="fa-regular fa-trash-can "></i></a> *@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            
+        </table>
+    </div>
+    @if (TempData["alertupdate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show alertpopup px-5" role="alert">
+            <strong>@TempData["alertupdate"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        TempData["alertupdate"] = null;
+    }
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('#CategoryTable').dataTable({
+                /* No ordering applied by DataTables during initialisation */
+                "order": []
+
+            });
+            new DataTable('#CategoryTable');
+        })
+
+
+
+        function editcategory(catval,id) {
+
+            console.log(catval)
+
+            let cattable = catval.parentElement.parentElement;
+            console.log(cattable.children[0].innerText);
+            console.log(document.querySelector('#P_C_Id'));
+
+            document.querySelector('#P_C_Id').value = id;
+            document.querySelector('#P_C_Name').value = cattable.children[0].innerText;
+            document.querySelector('#P_C_Order').value = cattable.children[1].innerText;
+             // Handle Image
+            let imgSrc = cattable.children[2].querySelector("img").src;
+            document.querySelector("#currentProductImage").src = imgSrc; // Show existing image
+
+
+            document.querySelector('#P_C_Status').checked = cattable.children[3].children[0].children[0].checked;
+        }
+
+        function StatusUpdate(categoryid, control) {
+            console.log(categoryid);
+            $.ajax({
+                method: "POST",
+                // dataType: "Text",
+                url: "@Url.Action("Category_Status", "Admin")",
+
+                data: { id: categoryid, check: control },
+                success: function (data) {
+                    console.log(data);
+
+                }
+            });
+        }
+    </script>
+
+
+
+
+}
+
+

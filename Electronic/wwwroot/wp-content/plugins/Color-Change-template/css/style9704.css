@@ -1,0 +1,165 @@
+.buy-now {
+  position: fixed;
+  z-index: 1020;
+  top: calc(50% - 120px);
+  left: 0;
+  display: block;
+  text-align: center;
+  height: 40px;
+  width: 40px;
+  clear: both;
+}
+.buy-now .btn-primary:hover {
+  width: 180px;
+  text-decoration: none !important;
+  transition: width .2s ease .1s;
+}
+.buy-now .btn-primary {
+  background-color: #89b222;
+  text-align: left;
+  padding-left: 7px;
+  font-weight: 500;
+  transition: width .2s ease .0s;
+}
+.buy-now .btn-primary,
+.colorswatch-btn {
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.colorswatch-btn {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px!important;
+  border-radius: 0 3px 3px 0;
+  padding: 0!important;
+  transition: .3s;
+  cursor: pointer;
+}
+.colorswatch-btn {
+  background: #252936 !important;
+}
+.colorswatch-btn svg,
+.buy-now .btn-primary svg {
+  width: 27px;
+  height: 27px;
+  position: relative;
+  top: 5px;
+  left: 1px;
+  fill: #fff;
+}
+.buy-now .btn-primary svg {
+  position: relative;
+  left: -2px;
+  margin: 0 10px 0 0;
+}
+.colorswatch {
+  position: fixed;
+  z-index: 10020;
+  top: calc(50% - 80px);
+  left: 0;
+  display: block;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+}
+.colorswatch-inside {
+  position: absolute;
+  left: -179px;
+  width: 179px;
+  background-color: #f7f7f7;
+  padding: 10px 0 5px 10px;
+  transition: .3s;
+}
+.colorswatch.opened .colorswatch-inside {
+  left: 0;
+}
+.colorswatch.opened .colorswatch-btn {
+  left: 179px;
+  padding: 5px 0px 0px 0px;
+}
+.colorswatch-inside a {
+  position: relative;
+  margin: 0 3px 5px;
+  width: 34px;
+  height: 33px;
+  display: block;
+  float: left;
+  transition: .2s;
+  text-decoration: none !important;
+}
+.colorswatch-inside a.active {
+  z-index: 1;
+}
+.colorswatch-inside a.active:after {
+  content: '\e906';
+  font-family: 'Electrician';
+  font-size: 14px;
+  color: #fff;
+  position: relative;
+  top: 4px;
+  left: 1px;
+}
+ 
+.colorswatch-inside a:nth-child(1) {
+  background: #f47629;
+}
+.colorswatch-inside a:nth-child(1):hover {
+  background: #f47629;
+}
+.colorswatch-inside a:nth-child(2) {
+  background: #f5c33d;
+}
+.colorswatch-inside a:nth-child(2):hover {
+  background: #f5c33d;
+}
+.colorswatch-inside a:nth-child(3) {
+  background: #ed3b43;
+}
+.colorswatch-inside a:nth-child(3):hover {
+  background: #ed3b43;
+}
+.colorswatch-inside a:nth-child(4) {
+  background: #4e8abe;
+}
+.colorswatch-inside a:nth-child(4):hover {
+  background: #4e8abe;
+}
+.colorswatch-inside a:nth-child(5) {
+  background: #b1986c;
+}
+.colorswatch-inside a:nth-child(5):hover {
+  background: #b1986c;
+}
+.colorswatch-inside a:nth-child(6) {
+  background: #00cbcb;
+}
+.colorswatch-inside a:nth-child(6):hover {
+  background: #00cbcb;
+}
+.colorswatch-inside a:nth-child(7) {
+  background: #4e7df1;
+}
+.colorswatch-inside a:nth-child(7):hover {
+  background: #4e7df1;
+}
+.colorswatch-inside a:nth-child(8) {
+  background: #27a55b;
+}
+.colorswatch-inside a:nth-child(8):hover {
+  background: #27a55b;
+}
+
+.colorswatch-inside a.active:before {
+  display: block;
+}
+@media only screen and (max-width: 768px) {
+  .tt-colorswatch {
+    top: 116px;
+  }
+}
+.colorswatch-inside a {
+    text-decoration: none;
+}
