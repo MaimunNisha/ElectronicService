@@ -51,5 +51,10 @@ namespace Electronic.Controllers
             return RedirectToAction("Login");
 
         }
+
+        public IActionResult Forgot()
+        {
+            return View();
+        }
     }
 }

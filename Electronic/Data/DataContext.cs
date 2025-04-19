@@ -7,6 +7,7 @@ namespace Electronic.Data
         public DataContext(DbContextOptions options) : base(options)
         {
         }
+        public DbSet<ProductCategoryMst> ProductCategoryMsts { get; set; }
 
     }
 }

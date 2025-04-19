@@ -1,4 +1,4 @@
-﻿@model Electronic.Models.SubProductCategoryListModel
+﻿@model Electronic.Models.ProductCategoryListModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Visitor_Layout.cshtml";
@@ -287,7 +287,7 @@
 												<li class="active">
 													<a class="gallery-navitem" href="filter-all">All Products</a>
 												</li>
-												@foreach (var category in Model.ProductCategoryList.Select(c => c.P_C_Name).Distinct())
+												@foreach (var category in Model.categoryList.Select(c => c.C_Name).Distinct())
 												{
 													<li>
 														<a class="gallery-navitem" href="@category.Replace(" ", "_").ToLower()">@category</a>
@@ -300,17 +300,17 @@
 										</div>
 										<div id="filter-layout"
 											 class="row justify-content-center tt-gallery-wrapper js-wrapper-gallery">
-											@foreach (var product in Model.ProductCategoryList)
+											@foreach (var product in Model.categoryList)
 											{
-												var uniqueClass = product.P_C_Name.Replace(" ", "_").ToLower() + "_" + product.P_C_Id;
+												var uniqueClass = product.C_Name.Replace(" ", "_").ToLower() + "_" + product.C_Id;
 
 												<div class="col-6 col-md-3 show filter-all @uniqueClass">
-													<a href="@product.P_C_Image" class="tt-gallery">
+													<a href="@product.C_Image" class="tt-gallery">
 														<div class="gallery__icon"></div>
 														<img loading="lazy" decoding="async" width="222" height="222"
-															 src="@product.P_C_Image" class="attachment-full size-full" alt="@product.P_C_Name"
+															 src="@product.C_Image" class="attachment-full size-full" alt="@product.C_Name"
 															 style="max-height: 300px; margin: 0 auto 1rem;" />
-														<h4 class="tt-box02 tt-box02__title" style="color: #000000;">@product.P_C_Name</h4>
+														<h4 class="tt-box02 tt-box02__title" style="color: #000000;">@product.C_Name</h4>
 													</a>
 												</div>
 											}
