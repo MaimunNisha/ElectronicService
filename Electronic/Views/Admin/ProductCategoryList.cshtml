@@ -6,26 +6,34 @@
 
 }
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
 @functions {
     void RenderCategoryRow(Electronic.Models.ProductCategoryListModel category, int level = 0)
     {
         <tr>
-            <td class="d-flex ">
-            <div>
-                @Html.Raw(string.Concat(Enumerable.Repeat("&nbsp;&nbsp;&nbsp;&nbsp;", level)))
-                @Html.Raw(level > 0 ? "&#8627;&nbsp;" : "")
-                </div>
-                <div>
-                <img src="../@category.C_Image" alt="@category.C_Name" class="img-thumbnail" style="height: 60px; width: 60px; cursor: pointer;"
-                     data-bs-toggle="modal"
-                     data-bs-target="#ImagePreviewModal"
-                     onclick="showImageModal(this)" />
-</div>
-                <strong>@category.C_Name</strong>
+            <td>
+                <div class="row">
+                    <div class="col-7 d-flex">
+                        <span style="line-height: 2;font-weight: bolder;font-size: x-large;">
 
-                <button class="btn btn-outline-primary p-0" onclick="openCategoryModal('@category.Raw_C_Id')">Add Sub Category</button>
+                            @Html.Raw(string.Concat(Enumerable.Repeat("&nbsp;&nbsp;&nbsp;&nbsp;", level)))
+                            @Html.Raw(level > 0 ? "&#8627;&nbsp;" : "")
+                        </span>
+                        <img src="../@category.C_Image" alt="@category.C_Name" class="img-thumbnail" style="height: 60px; width: 60px; cursor: pointer;"
+                             data-bs-toggle="modal"
+                             data-bs-target="#ImagePreviewModal"
+                             onclick="showImageModal(this)" />
+
+                        <strong style="line-height: 4;">@category.C_Name</strong>
+                    </div>
+                    <div class="col-5">
+                        <button class="btn btn-primary  float-end m-2" onclick="openCategoryModal('@category.Raw_C_Id')">Add Category</button>
+                        <button class="btn btn-primary float-end m-2" onclick="openProductModal('@category.Raw_C_Id')">Add Product</button>
+
+                    </div>
+                </div>
             </td>
             <td>@category.C_Order</td>
             <td>
@@ -36,8 +44,8 @@
             <td>@category.C_CreatedDate.ToShortDateString()</td>
             <td>@(category.ParentCategoryId == null ? "Root" : category.ParentCategoryId.ToString())</td>
             <td>
-                <a onclick='showRowData(@Html.Raw(Json.Serialize(category)))' data-bs-toggle="modal" data-bs-target="#EditCategoryModal" class="btn btn-success text-white w-px-14 mx-1"> Edit</a>
-                <a class="btn btn-danger text-white" onclick="deleteCategory('@category.C_Id')">Delete</a>
+                <a onclick='showRowData(@Html.Raw(Json.Serialize(category)))' data-bs-toggle="modal" data-bs-target="#EditCategoryModal" class="btn btn-success text-white p-14 mb-2"> Edit</a>
+                <a class="btn btn-danger text-white p-14 " onclick="deleteCategory('@category.C_Id')">Delete</a>
             </td>
         </tr>
 
@@ -50,53 +58,105 @@
         }
     }
 }
+<div style="border:1px solid #dbdade; border-radius:5px">
+    <div class="container-fluid py-3 ">
+        <div class="admin-heading ">
+            <h1 style="font-size:25px" class="d-inline-block m-0">Category List</h1>
+            <button class=" btn btn-primary float-end mb-3 m-1" onclick="openCategoryModal(null)">Add Parent Category</button>
+            <a class=" btn btn-primary float-end mb-3 m-1" asp-action="ProductList" asp-controller="Admin">Product List</a>
+        </div>
+    </div>
+    <hr />
+    <!-- Main Category Tree -->
 
-<button class="btn btn-success mb-3" onclick="openCategoryModal(null)">Add Parent Category</button>
+    <div class="table-responsive px-3 pb-3">
+        <table class="table table-bordered" id="CategoryTable">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Name</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Parent</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
 
-<!-- Main Category Tree -->
-
-<div class="table-responsive px-3 pb-3">
-    <table class="table table-bordered" id="CategoryTable">
-        <thead class="table-secondary">
-            <tr>
-                <th>Name</th>
-                <th>Order</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Parent</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @if (Model.categoryList != null && Model.categoryList.Count > 0)
-            {
-                foreach (var item in Model.categoryList)
+                @if (Model.categoryList != null && Model.categoryList.Count > 0)
                 {
-                    RenderCategoryRow(item);
+                    foreach (var item in Model.categoryList)
+                    {
+                        RenderCategoryRow(item);
+                    }
                 }
-            }
-            else
-            {
-                <tr><td colspan="6" class="text-center">No Category Found</td></tr>
-            }
+                else
+                {
+                    <tr><td colspan="6" class="text-center">No Category Found</td></tr>
+                }
 
-        </tbody>
-    </table>
-</div>
-<!--Edit Category Modal -->
-<div class="modal fade" id="EditCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product Category</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </tbody>
+        </table>
+    </div>
+    <!--Edit Category Modal -->
+    <div class="modal fade" id="EditCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="EditProductCategory" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                        <input type="hidden" name="ParentCategoryId" id="ParentCategoryId" />
+                        <input type="hidden" id="C_Id" name="C_Id" />
+                        <div class="mb-3">
+                            <label asp-for="C_Name" class="form-label">Name</label>
+                            <input asp-for="C_Name" class="form-control" placeholder="Enter Category Name" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="C_Order" class="form-label">Order</label>
+                            <input asp-for="C_Order" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <p class="d-inline-block m-0 m-xl-2 m-lg-1">Product Image:</p>
+                            <span class="form-text m-0">(Must be 650*180 pixels and is less than 3 MB in size.)</span>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-images"></i></span>
+                                <input class="form-control p-1" type="file" asp-for="C_Image_Temp">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>Current Category Image:</p>
+                            <img id="currentCategoryImage" src="" alt="Current Image" height="150px" width="150px" />
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <label asp-for="C_IsApproved" class="form-check-label" for="flexSwitchCheckDefault">Status</label>
+                                <input asp-for="C_IsApproved" class="form-check-input" type="checkbox" role="switch" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
-            <form asp-action="EditProductCategory" enctype="multipart/form-data">
-                <div class="modal-body">
+        </div>
+    </div>
 
-                    <input type="hidden" name="ParentCategoryId" id="ParentCategoryId" />
-                    <input type="hidden" id="C_Id" name="C_Id" />
+    <!-- Category Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form asp-action="AddCategory" enctype="multipart/form-data" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ParentCategoryId" id="ParentCategoryIds" />
                     <div class="mb-3">
                         <label asp-for="C_Name" class="form-label">Name</label>
                         <input asp-for="C_Name" class="form-control" placeholder="Enter Category Name" />
@@ -113,66 +173,60 @@
                             <input class="form-control p-1" type="file" asp-for="C_Image_Temp">
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <p>Current Category Image:</p>
-                        <img id="currentCategoryImage" src="" alt="Current Image" height="150px" width="150px" />
-                    </div>
                     <div class="mb-3">
                         <div class="form-check form-switch">
                             <label asp-for="C_IsApproved" class="form-check-label" for="flexSwitchCheckDefault">Status</label>
                             <input asp-for="C_IsApproved" class="form-check-input" type="checkbox" role="switch" />
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Add Category</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form asp-action="AddProduct" enctype="multipart/form-data" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="CategoryId" id="ProductCategoryId" />
+                    <div class="mb-3">
+                        <label asp-for="P_Name" class="form-label">Product Name</label>
+                        <input asp-for="P_Name" class="form-control" placeholder="Enter Product Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="P_Description" class="form-label">Description</label>
+                        <textarea asp-for="P_Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product Images</label>
+                        <input name="Images" type="file" class="form-control" multiple /> <!-- ✅ multiple added -->
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" asp-for="P_IsApproved">Status</label>
+                            <input asp-for="P_IsApproved" class="form-check-input" type="checkbox" role="switch"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
 
-<!-- Category Modal -->
-<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form asp-action="AddCategory" enctype="multipart/form-data" class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" name="ParentCategoryId" id="ParentCategoryIds" />
-                <div class="mb-3">
-                    <label asp-for="C_Name" class="form-label">Name</label>
-                    <input asp-for="C_Name" class="form-control" placeholder="Enter Category Name" />
-                </div>
-                <div class="mb-3">
-                    <label asp-for="C_Order" class="form-label">Order</label>
-                    <input asp-for="C_Order" class="form-control" />
-                </div>
-                <div class="col-md-12">
-                    <p class="d-inline-block m-0 m-xl-2 m-lg-1">Product Image:</p>
-                    <span class="form-text m-0">(Must be 650*180 pixels and is less than 3 MB in size.)</span>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text"><i class="far fa-images"></i></span>
-                        <input class="form-control p-1" type="file" asp-for="C_Image_Temp">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <label asp-for="C_IsApproved" class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                        <input asp-for="C_IsApproved" class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add Category</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </form>
-    </div>
 
     @if (TempData["alertupdate"] != null)
     {
@@ -188,7 +242,6 @@
         </div>
     }
 
-</div>
 <!-- Image Preview Modal -->
 <div class="modal fade" id="ImagePreviewModal" tabindex="-1" aria-labelledby="ImagePreviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -203,29 +256,47 @@
         </div>
     </div>
 </div>
-
+</div>
 @section Scripts {
     <script>
         function openCategoryModal(parentId) {
                document.getElementById("ParentCategoryIds").value = parentId ?? "";
                var modal = new bootstrap.Modal(document.getElementById("categoryModal"));
+
                modal.show();
            }
+
+                           function openProductModal(categoryId) {
+            document.getElementById("ProductCategoryId").value = categoryId ?? "";
+            var modal = new bootstrap.Modal(document.getElementById("productModal"));
+            modal.show();
+                           }
+                    function openProductModal(categoryId) {
+            // Ensure the modal is being properly triggered
+            console.log("Opening product modal for category ID:", categoryId); // Debugging
+            document.getElementById("ProductCategoryId").value = categoryId ?? "";
+
+            // Debug: Check if the modal is being properly selected
+            var modal = document.getElementById("productModal");
+            console.log("Modal Element:", modal); // Check if modal is correctly found
+
+            // If modal is correctly selected, show it
+            if (modal) {
+                var bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+            } else {
+                console.error("Modal not found! Check if the ID is correct.");
+            }
+
+        }
+
+
 
     </script>
 
 
     <script>
-                $(document).ready(function () {
 
-
-                    $('#CategoryTable').dataTable({
-                        /* No ordering applied by DataTables during initialisation */
-                        "order": []
-
-                    });
-                    new DataTable('#CategoryTable');
-                })
                 function showImageModal(img) {
             var src = img.getAttribute("src");
             document.getElementById("modalImage").src = src;
@@ -254,25 +325,25 @@
             });
         }
 
-               
-        
+
+
         function deleteCategory(id) {
             if (confirm("Are you sure you want to delete this category?")) {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Category_delete", "ProductCategory")',
+                    url: '@Url.Action("Category_delete", "Admin")',
                     data: { id: id },
                     success: function (response) {
                     },
-                    
+
                 });
             }
         }
 
-        
+
         function showRowData(item) {
             console.log("Category Row Data:", item);
-        
+
         // Set ParentCategoryId properly
             if (item.parentCategoryId === null) {
                 document.getElementById("ParentCategoryId").value = "";

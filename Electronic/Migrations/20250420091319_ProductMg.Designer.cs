@@ -4,6 +4,7 @@ using Electronic.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Electronic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250420091319_ProductMg")]
+    partial class ProductMg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,28 +60,6 @@ namespace Electronic.Migrations
                     b.ToTable("ProductCategoryMsts");
                 });
 
-            modelBuilder.Entity("Electronic.Data.ProductImageMst", b =>
-                {
-                    b.Property<int>("ImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImageId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductImageMsts");
-                });
-
             modelBuilder.Entity("Electronic.Data.ProductMst", b =>
                 {
                     b.Property<int>("P_Id")
@@ -120,17 +101,6 @@ namespace Electronic.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("Electronic.Data.ProductImageMst", b =>
-                {
-                    b.HasOne("Electronic.Data.ProductMst", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Electronic.Data.ProductMst", b =>
                 {
                     b.HasOne("Electronic.Data.ProductCategoryMst", "Category")
@@ -147,11 +117,6 @@ namespace Electronic.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("Electronic.Data.ProductMst", b =>
-                {
-                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }

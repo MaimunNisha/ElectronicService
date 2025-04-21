@@ -4,6 +4,7 @@ using Electronic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace Electronic.Controllers
 {
@@ -27,19 +28,34 @@ namespace Electronic.Controllers
         {
             ProductCategoryListModel categoryListModel = new ProductCategoryListModel();
             ProductCategoryRepository product = new ProductCategoryRepository(_dataContext, _webHostEnvironment);
-            categoryListModel.categoryList = await product.GetProductList();
+
+            var fullList = await product.GetProductList(); // get all categories (flat)
+            categoryListModel.categoryList = product.BuildCategoryTree(fullList); // get only root categories with children
+
             return View(categoryListModel);
         }
+
         #endregion Index
 
         #region Product
-        public async Task<IActionResult> Product()
+        public async Task<IActionResult> Category(string id)
         {
-            ProductCategoryListModel categoryModelList = new ProductCategoryListModel();
+            if (string.IsNullOrEmpty(id)) return RedirectToAction("Index");
+
+            int rawId = int.Parse(Encoding.UTF32.GetString(Convert.FromBase64String(id)));
 
             ProductCategoryRepository product = new ProductCategoryRepository(_dataContext, _webHostEnvironment);
-            //categoryModelList.productCategoryList = await product.GetProductList();
-            return View(categoryModelList);
+            var fullList = await product.GetProductList();
+
+            var selectedCategory = fullList.FirstOrDefault(x => x.Raw_C_Id == rawId);
+            var subCategories = fullList.Where(x => x.ParentCategoryId == rawId).ToList();
+            var rootCategories = fullList.Where(x => x.ParentCategoryId == null).ToList();
+
+            ViewBag.SelectedCategory = selectedCategory;
+            ViewBag.RootCategories = rootCategories;
+            ViewBag.SubCategories = subCategories;
+
+            return View();
         }
 
         #endregion Product
@@ -55,7 +71,7 @@ namespace Electronic.Controllers
         //            Main_P_C_Id = s.Main_P_C_Id,
         //            Sub_P_C_Name = s.Sub_P_C_Name,
         //            Sub_P_C_Image = s.Sub_P_C_Image,
-                    
+
         //        })
         //        .ToListAsync();
 

@@ -8,6 +8,8 @@ namespace Electronic.Data
         {
         }
         public DbSet<ProductCategoryMst> ProductCategoryMsts { get; set; }
+        public DbSet<ProductMst> ProductMsts { get; set; }
+        public DbSet<ProductImageMst> ProductImageMsts { get; set; }
 
     }
 }

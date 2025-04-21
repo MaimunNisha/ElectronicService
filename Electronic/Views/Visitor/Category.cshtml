@@ -1,0 +1,38 @@
+﻿@model Electronic.Models.ProductCategoryListModel
+
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Visitor_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Sidebar: Categories -->
+        <div class="col-md-3">
+            <h4>Categories</h4>
+            <ul class="list-group">
+                @foreach (var cat in ViewBag.RootCategories)
+                {
+                    <li class="list-group-item @(cat.Raw_C_Id == ViewBag.SelectedCategory.Raw_C_Id ? "active" : "")">
+                        <a href="@Url.Action("Category", "Product", new { id = cat.C_Id })">@cat.C_Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Right: Sub-categories -->
+        <div class="col-md-9">
+            <h3>Subcategories of @ViewBag.SelectedCategory.C_Name</h3>
+            <div class="row">
+                @foreach (var sub in ViewBag.SubCategories)
+                {
+                    <div class="col-md-4 text-center mb-4">
+                        <img src="@sub.C_Image" class="img-fluid" style="max-height: 200px;" />
+                        <p>@sub.C_Name</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

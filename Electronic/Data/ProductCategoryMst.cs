@@ -16,6 +16,7 @@ namespace Electronic.Data
         public ProductCategoryMst? ParentCategory { get; set; }
 
         public ICollection<ProductCategoryMst> SubCategories { get; set; } = new List<ProductCategoryMst>();
+        public ICollection<ProductMst> ProductImages { get; set; }
 
     }
 }

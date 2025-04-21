@@ -287,36 +287,36 @@
 												<li class="active">
 													<a class="gallery-navitem" href="filter-all">All Products</a>
 												</li>
-												@foreach (var category in Model.categoryList.Select(c => c.C_Name).Distinct())
+												@foreach (var category in Model.categoryList) // Now contains only root categories
 												{
 													<li>
-														<a class="gallery-navitem" href="@category.Replace(" ", "_").ToLower()">@category</a>
+														<a class="gallery-navitem" href="@category.C_Name.Replace(" ", "_").ToLower()">@category.C_Name</a>
 													</li>
 												}
+
 											</ul>
 
 
 
 										</div>
-										<div id="filter-layout"
-											 class="row justify-content-center tt-gallery-wrapper js-wrapper-gallery">
+										<div id="filter-layout" class="row justify-content-center tt-gallery-wrapper js-wrapper-gallery">
 											@foreach (var product in Model.categoryList)
 											{
 												var uniqueClass = product.C_Name.Replace(" ", "_").ToLower() + "_" + product.C_Id;
 
 												<div class="col-6 col-md-3 show filter-all @uniqueClass">
-													<a href="@product.C_Image" class="tt-gallery">
+													<a href="@Url.Content("~/" + product.C_Image)" class="tt-gallery" target="_blank">
 														<div class="gallery__icon"></div>
 														<img loading="lazy" decoding="async" width="222" height="222"
 															 src="@product.C_Image" class="attachment-full size-full" alt="@product.C_Name"
 															 style="max-height: 300px; margin: 0 auto 1rem;" />
+
 														<h4 class="tt-box02 tt-box02__title" style="color: #000000;">@product.C_Name</h4>
+
 													</a>
+													
 												</div>
 											}
-
-
-
 										</div>
 										<script>
 								              	document.addEventListener("DOMContentLoaded", function () {

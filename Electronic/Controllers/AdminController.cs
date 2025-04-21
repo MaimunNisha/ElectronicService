@@ -3,6 +3,7 @@ using Electronic.Models;
 using Electronic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Electronic.Controllers
 {
@@ -106,7 +107,7 @@ namespace Electronic.Controllers
         public async Task<IActionResult> Category_delete(string id)
         {
             ProductCategoryRepository category = new ProductCategoryRepository(_dataContext, _webHostEnvironment);
-            await category.DeleteCategory(id); // Only call it once with the encoded ID
+            await category.DeleteCategory(id); 
             TempData["alertdelete"] = "Category deleted successfully!";
             return RedirectToAction("User_List");
         }
@@ -117,6 +118,87 @@ namespace Electronic.Controllers
 
         #endregion Product Category
 
+
+        #region Product
+
+        #region Product List
+
+        public async Task<IActionResult> ProductList()
+        {
+            ProductListModel productListViewModel = new ProductListModel();
+            ProductRepository productRepo = new ProductRepository(_dataContext, _webHostEnvironment);
+
+            var products = await productRepo.GetProductList();
+            productListViewModel.ProductList = products;
+
+            return View(productListViewModel);
+        }
+
+
+        #endregion Product List
+
+        #region Product Add
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(ProductModel model)
+        {
+            
+                ProductRepository productRepo = new ProductRepository(_dataContext, _webHostEnvironment);
+                await productRepo.AddProduct(model);
+                TempData["Success"] = "Product Added Successfully!";
+                return RedirectToAction("ProductList");
+            
+        }
+
+        #endregion Product Add
+
+        #region Product Edit
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(ProductModel productModel)
+        {
+
+            ProductRepository product = new ProductRepository(_dataContext, _webHostEnvironment);
+            await product.EditProduct(productModel);
+            TempData["alertupdate"] = "Your Product  Update is Successfull!";
+
+            return RedirectToAction("ProductList");
+
+        }
+
+
+        #endregion Product Edit
+
+
+        #region Product Status
+
+        [HttpPost]
+        public async Task<JsonResult> Product_Status(string id, bool check)
+        {
+            ProductRepository category = new ProductRepository(_dataContext, _webHostEnvironment);
+            await category.Status_Product(id, check);
+            return Json("Status Updated");
+        }
+
+
+        #endregion Product Status
+
+
+        #region Product Delete
+
+        [HttpPost]
+        public async Task<IActionResult> Product_delete(string id)
+        {
+            ProductRepository category = new ProductRepository(_dataContext, _webHostEnvironment);
+            await category.DeleteProduct(id);
+            TempData["alertdelete"] = "Product deleted successfully!";
+            return RedirectToAction("User_List");
+        }
+
+
+        #endregion Product Delete
+
+        #endregion Product
 
 
 
